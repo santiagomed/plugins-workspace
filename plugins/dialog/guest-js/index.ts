@@ -57,6 +57,8 @@ interface OpenDialogOptions {
   recursive?: boolean;
   /** Whether to allow creating directories in the dialog. Enabled by default. **macOS Only** */
   canCreateDirectories?: boolean;
+  /** Whether to allow reading the file's data as base64. */
+  readData?: boolean;
 }
 
 /**
@@ -164,7 +166,7 @@ type OpenDialogReturn<T extends OpenDialogOptions> = T["directory"] extends true
  */
 async function open<T extends OpenDialogOptions>(
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  options: T = {} as T,
+  options: T = {} as T
 ): Promise<OpenDialogReturn<T>> {
   if (typeof options === "object") {
     Object.freeze(options);
@@ -224,7 +226,7 @@ async function save(options: SaveDialogOptions = {}): Promise<string | null> {
  */
 async function message(
   message: string,
-  options?: string | MessageDialogOptions,
+  options?: string | MessageDialogOptions
 ): Promise<void> {
   const opts = typeof options === "string" ? { title: options } : options;
   await invoke("plugin:dialog|message", {
@@ -253,7 +255,7 @@ async function message(
  */
 async function ask(
   message: string,
-  options?: string | ConfirmDialogOptions,
+  options?: string | ConfirmDialogOptions
 ): Promise<boolean> {
   const opts = typeof options === "string" ? { title: options } : options;
   return await invoke("plugin:dialog|ask", {
@@ -283,7 +285,7 @@ async function ask(
  */
 async function confirm(
   message: string,
-  options?: string | ConfirmDialogOptions,
+  options?: string | ConfirmDialogOptions
 ): Promise<boolean> {
   const opts = typeof options === "string" ? { title: options } : options;
   return await invoke("plugin:dialog|confirm", {

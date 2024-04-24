@@ -53,6 +53,8 @@ pub struct OpenDialogOptions {
     recursive: bool,
     /// Whether to allow creating directories in the dialog **macOS Only**
     can_create_directories: Option<bool>,
+
+    read_data: Option<bool>,
 }
 
 /// The options for the save dialog API.
@@ -105,6 +107,9 @@ pub(crate) async fn open<R: Runtime>(
     }
     if let Some(title) = options.title {
         dialog_builder = dialog_builder.set_title(title);
+    }
+    if let Some(read_data) = options.read_data {
+        dialog_builder = dialog_builder.set_read_data(read_data);
     }
     if let Some(default_path) = options.default_path {
         dialog_builder = set_default_path(dialog_builder, default_path);

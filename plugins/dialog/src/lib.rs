@@ -262,16 +262,18 @@ pub struct FileDialogBuilder<R: Runtime> {
     pub(crate) file_name: Option<String>,
     pub(crate) title: Option<String>,
     pub(crate) can_create_directories: Option<bool>,
+    pub(crate) read_data: Option<bool>,
     #[cfg(desktop)]
     pub(crate) parent: Option<raw_window_handle::RawWindowHandle>,
 }
 
 #[cfg(mobile)]
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct FileDialogPayload<'a> {
     filters: &'a Vec<Filter>,
     multiple: bool,
+    read_data: bool,
 }
 
 // raw window handle :(
@@ -287,6 +289,7 @@ impl<R: Runtime> FileDialogBuilder<R> {
             file_name: None,
             title: None,
             can_create_directories: None,
+            read_data: None,
             #[cfg(desktop)]
             parent: None,
         }
@@ -297,6 +300,7 @@ impl<R: Runtime> FileDialogBuilder<R> {
         FileDialogPayload {
             filters: &self.filters,
             multiple,
+            read_data: self.read_data.unwrap_or(false),
         }
     }
 
@@ -321,6 +325,12 @@ impl<R: Runtime> FileDialogBuilder<R> {
     #[must_use]
     pub fn set_file_name(mut self, file_name: impl Into<String>) -> Self {
         self.file_name.replace(file_name.into());
+        self
+    }
+
+    #[must_use]
+    pub fn set_read_data(mut self, can: bool) -> Self {
+        self.read_data.replace(can);
         self
     }
 
